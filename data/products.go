@@ -10,6 +10,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+var ErrProductNotFound = fmt.Errorf("Product not found")
+
 type Product struct {
 	ID          int     `json:"id"`
 	Name        string  `json:"name" validate:"required"`
@@ -68,6 +70,17 @@ func UpdateProfuct(id int, p *Product) error {
 
 	p.ID = id
 	productList[pos] = p
+	return nil
+}
+
+func DeleteProduct(id int) error {
+	_, i, _ := findProduct(id)
+	if i == -1 {
+		return ErrProductNotFound
+	}
+
+	productList = append(productList[:i], productList[i+1])
+
 	return nil
 }
 

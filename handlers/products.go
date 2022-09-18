@@ -22,6 +22,11 @@ import (
 	"practice/data"
 )
 
+// GenericError is a generic error message returned by a server
+type GenericError struct {
+	Message string `json:"message"`
+}
+
 // A list of products
 // swagger:response productsResponse
 type productsResponseWrapper struct {
