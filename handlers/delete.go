@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"practice/data"
-	"strconv"
 
-	"github.com/gorilla/mux"
+	"practice/data"
 )
 
 // swagger:route DELETE /products/{id} products deleteProduct
@@ -18,15 +16,13 @@ import (
 
 // Delete handles DELETE requests and removes items from the database
 func (p *Products) Delete(rw http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		http.Error(rw, "Unable To Convert id", http.StatusBadRequest)
-	}
+	rw.Header().Add("Content-Type", "application/json")
+
+	id := getProductID(r)
 
 	p.l.Println("[DEBUG] deleting record id", id)
 
-	err = data.DeleteProduct(id)
+	err := data.DeleteProduct(id)
 	if err == data.ErrProductNotFound {
 		p.l.Println("[ERROR] deleting record id does not exist")
 
